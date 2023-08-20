@@ -8,7 +8,6 @@ export const Filter = () => {
   const dispatch = useDispatch();
 
   const handleChange = e => {
-    console.log(e.target);
     const { value } = e.target;
 
     dispatch(onFiltredContacts(value));

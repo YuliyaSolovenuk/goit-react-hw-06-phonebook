@@ -3,6 +3,7 @@ import css from './Form.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
 import { selectContacts } from 'redux/selectors';
+import { useState } from 'react';
 
 Notiflix.Notify.init({
   width: '320px',
@@ -14,13 +15,13 @@ export function Form() {
   const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
 
-  let name = '';
-  let number = '';
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    name = evt.currentTarget.elements.name.value.trim();
-    number = evt.currentTarget.elements.number.value.trim();
+    const name = evt.currentTarget.elements.name.value.trim();
+    const number = evt.currentTarget.elements.number.value.trim();
 
     const isIncludeName = contacts.find(
       contact => contact.name.toLowerCase() === name.toLowerCase()
@@ -44,7 +45,8 @@ export function Form() {
     };
 
     dispatch(addContact(contact));
-    evt.target.reset();
+    setName('');
+    setNumber('');
   };
 
   return (
@@ -56,6 +58,8 @@ export function Form() {
             className={css.formInput}
             type="text"
             name="name"
+            value={name}
+            onChange={e => setName(e.target.value)}
             pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
@@ -67,6 +71,8 @@ export function Form() {
             className={css.formInput}
             type="tel"
             name="number"
+            value={number}
+            onChange={e => setNumber(e.target.value)}
             pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
